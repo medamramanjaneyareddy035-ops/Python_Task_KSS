@@ -1,0 +1,3 @@
+ram 80
+mahesh 60
+rohit 45
