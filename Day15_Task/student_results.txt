@@ -1,0 +1,5 @@
+Student Results
+{'Ram': 80, 'Ravi': 45, 'Krishna': 90, 'Arjun': 60, 'Sai': 30}
+Students above 50:
+[('Ram', 80), ('Krishna', 90), ('Arjun', 60)]
+Average Marks: 76

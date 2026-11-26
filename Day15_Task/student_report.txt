@@ -1,0 +1,11 @@
+STUDENT EXAM REPORT
+    Name  Marks Grade
+0    Ram     32  Fail
+1   Ravi     39  Fail
+2   Sita     25  Fail
+3   Raju     95     A
+4  Kiran     14  Fail
+
+Average Marks: 41.0
+Highest Marks: 95
+Lowest Marks: 14
