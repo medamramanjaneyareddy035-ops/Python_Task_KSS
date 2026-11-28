@@ -1,7 +1,7 @@
 # =============================================================================
 # PROJECT NAME : Railway_Guages  (Railway Gauge Analysis)
 # -----------------------------------------------------------------------------
-# DATASET      : railway_gauges_1.csv
+# DATASET      : railway_gauges.csv
 # COLUMNS      : Year (e.g. "1964-65"), Broad Gauge, Metre Gauge,
 #                Narrow Gauge, Total   (track length per gauge type)
 # WHAT IT DOES : Solves all 5 scenarios (cleaning -> line -> bar -> pie ->
@@ -130,8 +130,7 @@ ax = modern_gauges.plot(kind="bar", figsize=(13, 6), width=0.8)
 ax.set_title("Gauge-wise Track Length After 2000")
 ax.set_xlabel("Year")
 ax.set_ylabel("Track Length (km)")
-ax.set_ylim(0, modern_gauges.to_numpy().max() * 1.18)   # extra headroom so the legend never covers a bar
-ax.legend(title="Gauge Type", loc="upper left", ncol=3)  # legend
+ax.legend(title="Gauge Type")           # legend
 plt.xticks(rotation=45)
 save_graph("scenario3_grouped_bar.png")
 
@@ -213,29 +212,6 @@ ax.legend(title="Gauge Type", loc="upper center", bbox_to_anchor=(0.5, -0.25), n
 plt.xticks(rotation=90)
 save_graph("scenario5_stacked_bar.png")
 
-# 3c. Line graph of the PERCENTAGE share of each gauge (used for the final conclusion)
-plt.figure(figsize=(12, 6))
-for col, color in zip(pct_cols, ["tab:blue", "tab:orange", "tab:green"]):
-    plt.plot(df["Year"], df[col], marker="o", markersize=3, label=col, color=color)
-plt.title("Percentage Share of Each Gauge Over the Years")
-plt.xlabel("Year")
-plt.ylabel("Share of Track (%)")
-plt.xticks(rotation=90)
-plt.legend()
-plt.grid(alpha=0.3)
-save_graph("scenario5_percentage_line.png")
-
-# 3d. Stacked bar chart of the RAW track length (km) of the three gauges
-ax = df.set_index("Year")[three_gauges].plot(
-    kind="bar", stacked=True, figsize=(13, 6), width=0.9,
-    color=["tab:blue", "tab:orange", "tab:green"])
-ax.set_title("Raw Composition of Railway Track by Gauge (Stacked, km)")
-ax.set_xlabel("Year")
-ax.set_ylabel("Track Length (km)")
-ax.legend(title="Gauge Type", loc="upper center", bbox_to_anchor=(0.5, -0.25), ncol=3)
-plt.xticks(rotation=90)
-save_graph("scenario5_stacked_raw.png")
-
 # 4a. Highlight the years with the highest growth in Total tracks
 top_growth = df.nlargest(3, "Total Growth")[["Year", "Total Growth"]]
 print("\nTop 3 years with the highest growth in Total tracks (km):")
@@ -268,16 +244,6 @@ for col in three_gauges:
     print(f"  {col}: fell in {len(decline_years)} years; "
           f"biggest single-year fall = {diffs.min()} km "
           f"in {df['Year'].iloc[1:].iloc[diffs.argmin()]}")
-
-# 4c. Which decade shows a significant decline in a gauge?
-#     Compare the value at the start and end of each decade (by Start Year)
-print("\nChange in track length (km) by period for each gauge:")
-periods = [(1964, 1970), (1970, 1980), (1980, 1990), (1990, 2000), (2000, 2012)]
-for start, end in periods:
-    first_row = df[df["Start Year"] == start].iloc[0]
-    last_row = df[df["Start Year"] == end].iloc[0]
-    changes = {col: int(last_row[col] - first_row[col]) for col in three_gauges}
-    print(f"  {first_row['Year']} to {last_row['Year']}: {changes}")
 
 # 5. Final conclusion: is the system shifting towards a single dominant gauge?
 broad_first, broad_last = df["% Broad Gauge"].iloc[0], df["% Broad Gauge"].iloc[-1]
